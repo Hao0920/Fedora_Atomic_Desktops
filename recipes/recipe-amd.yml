@@ -1,5 +1,5 @@
 ---
-name: Fedora_Atomic_Desktops
+name: fedora-atomic-desktops
 description: Fedora Atomic KDE with AMD drivers
 alt-tags:
   - amd
@@ -17,9 +17,8 @@ modules:
       ID: fedora
       ID_LIKE: fedora
 
-  - from-file: ../files/recipes/base.yml
+  - from-file: common/base.yml
 
-  # AMD Mesa Freeworld
   - type: dnf
     repos:
       cleanup: true
