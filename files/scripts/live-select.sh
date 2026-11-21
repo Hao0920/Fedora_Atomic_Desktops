@@ -4,7 +4,7 @@
 
 set -e
 
-IMAGE_REGISTRY="ghcr.io/Hao0920/Fedora_Atomic_Desktops"
+IMAGE_REGISTRY="ghcr.io/hao0920/fedora-atomic-desktops"
 
 # 颜色定义
 RED='\033[0;31m'
