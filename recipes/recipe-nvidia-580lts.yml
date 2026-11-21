@@ -1,0 +1,37 @@
+---
+name: Fedora_Atomic_Desktops
+description: Fedora Atomic KDE with NVIDIA 580 LTS driver
+alt-tags:
+  - nvidia-580lts
+
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: latest
+
+modules:
+  - type: os-release
+    properties:
+      NAME: Fedora Atomic Desktops
+      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA 580 LTS)
+      VARIANT: KDE Edition
+      VARIANT_ID: kde
+      ID: fedora
+      ID_LIKE: fedora
+
+  - from-file: ../files/recipes/base.yml
+
+  # NVIDIA 580 LTS 驱动
+  - type: dnf
+    repos:
+      cleanup: true
+      files:
+        - https://negativo17.org/repos/fedora-nvidia-580.repo
+    install:
+      packages:
+        - nvidia-driver
+        - nvidia-settings
+        - nvidia-driver-cuda
+        - akmod-nvidia
+        - nvidia-driver-libs.i686
+        - libva-nvidia-driver
+
+  - type: signing
