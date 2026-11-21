@@ -27,10 +27,5 @@ modules:
       packages:
         - mesa-va-drivers-freeworld
         - mesa-va-drivers-freeworld.i686
-    replace:
-      - from-repo: rpmfusion-free
-        packages:
-          - mesa-vulkan-drivers
-          - mesa-vulkan-drivers.i686
 
   - type: signing
