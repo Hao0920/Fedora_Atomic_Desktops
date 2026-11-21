@@ -24,12 +24,13 @@ modules:
       cleanup: true
       files:
         - https://negativo17.org/repos/fedora-nvidia.repo
+      keys:
+        - https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
     install:
       packages:
         - nvidia-driver
         - nvidia-settings
         - nvidia-driver-cuda
-        - akmod-nvidia
         - nvidia-driver-libs.i686
         - libva-nvidia-driver
 
