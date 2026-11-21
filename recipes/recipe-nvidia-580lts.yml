@@ -1,5 +1,5 @@
 ---
-name: Fedora_Atomic_Desktops
+name: fedora-atomic-desktops
 description: Fedora Atomic KDE with NVIDIA 580 LTS driver
 alt-tags:
   - nvidia-580lts
@@ -17,9 +17,8 @@ modules:
       ID: fedora
       ID_LIKE: fedora
 
-  - from-file: ../files/recipes/base.yml
+  - from-file: common/base.yml
 
-  # NVIDIA 580 LTS 驱动
   - type: dnf
     repos:
       cleanup: true
