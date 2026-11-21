@@ -1,0 +1,38 @@
+---
+name: Fedora_Atomic_Desktops
+description: Fedora Atomic KDE with NVIDIA latest driver
+alt-tags:
+  - nvidia-latest
+
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: latest
+
+modules:
+  - type: os-release
+    properties:
+      NAME: Fedora Atomic Desktops
+      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA)
+      VARIANT: KDE Edition
+      VARIANT_ID: kde
+      ID: fedora
+      ID_LIKE: fedora
+
+  # 继承基础配置
+  - from-file: ../files/recipes/base.yml
+
+  # NVIDIA 驱动
+  - type: dnf
+    repos:
+      cleanup: true
+      files:
+        - https://negativo17.org/repos/fedora-nvidia.repo
+    install:
+      packages:
+        - nvidia-driver
+        - nvidia-settings
+        - nvidia-driver-cuda
+        - akmod-nvidia
+        - nvidia-driver-libs.i686
+        - libva-nvidia-driver
+
+  - type: signing
