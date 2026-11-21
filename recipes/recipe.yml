@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-name: Fedora_Atomic_Desktops
+name: fedora-atomic-desktops
 description: Fedora Atomic KDE with automatic GPU detection
 
 base-image: ghcr.io/ublue-os/kinoite-main
@@ -16,35 +16,32 @@ modules:
       ID: fedora
       ID_LIKE: fedora
 
-  # 基础包
   - type: dnf
     repos:
       cleanup: true
     install:
       packages:
-        - pciutils        # lspci 检测
-        - gum             # 图形化界面
-        - micro           # 文本编辑器
-        - fastfetch       # 系统信息
+        - pciutils
+        - gum
+        - micro
+        - fastfetch
     remove:
       packages:
         - firefox
         - firefox-langpacks
 
-  # Intel VAAPI（核显硬件加速）
   - type: dnf
     repos:
       cleanup: true
       nonfree: rpmfusion
     install:
       packages:
-        - libva-intel-driver      # 1st-4th Gen
-        - libva-intel-media-driver  # 5th Gen+ / Arc
+        - libva-intel-driver
+        - libva-intel-media-driver
         - intel-media-driver
         - mesa-dri-drivers
         - mesa-vulkan-drivers
 
-  # 复制检测脚本
   - type: files
     files:
       - source: scripts
@@ -52,13 +49,11 @@ modules:
       - source: systemd
         destination: /etc/systemd/system
 
-  # 启用 Live 检测服务
   - type: systemd
     system:
       enabled:
         - live-detect.service
 
-  # Flatpak
   - type: default-flatpaks
     configurations:
       - notify: false
