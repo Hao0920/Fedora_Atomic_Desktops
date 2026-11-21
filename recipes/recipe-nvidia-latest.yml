@@ -1,5 +1,5 @@
 ---
-name: Fedora_Atomic_Desktops
+name: fedora-atomic-desktops
 description: Fedora Atomic KDE with NVIDIA latest driver
 alt-tags:
   - nvidia-latest
@@ -17,10 +17,8 @@ modules:
       ID: fedora
       ID_LIKE: fedora
 
-  # 继承基础配置
-  - from-file: ../files/recipes/base.yml
+  - from-file: common/base.yml
 
-  # NVIDIA 驱动
   - type: dnf
     repos:
       cleanup: true
