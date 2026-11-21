@@ -1,0 +1,37 @@
+---
+name: Fedora_Atomic_Desktops
+description: Fedora Atomic KDE with AMD drivers
+alt-tags:
+  - amd
+
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: latest
+
+modules:
+  - type: os-release
+    properties:
+      NAME: Fedora Atomic Desktops
+      PRETTY_NAME: Fedora Atomic Desktops (AMD)
+      VARIANT: KDE Edition
+      VARIANT_ID: kde
+      ID: fedora
+      ID_LIKE: fedora
+
+  - from-file: ../files/recipes/base.yml
+
+  # AMD Mesa Freeworld
+  - type: dnf
+    repos:
+      cleanup: true
+      nonfree: rpmfusion
+    install:
+      packages:
+        - mesa-va-drivers-freeworld
+        - mesa-va-drivers-freeworld.i686
+    replace:
+      - from-repo: rpmfusion-free
+        packages:
+          - mesa-vulkan-drivers
+          - mesa-vulkan-drivers.i686
+
+  - type: signing
