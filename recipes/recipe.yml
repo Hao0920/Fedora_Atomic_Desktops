@@ -16,50 +16,6 @@ modules:
       ID: fedora
       ID_LIKE: fedora
 
-  - type: dnf
-    repos:
-      cleanup: true
-    install:
-      packages:
-        - pciutils
-        - gum
-        - micro
-        - fastfetch
-    remove:
-      packages:
-        - firefox
-        - firefox-langpacks
-
-  - type: dnf
-    repos:
-      cleanup: true
-      nonfree: rpmfusion
-    install:
-      packages:
-        - libva-intel-driver
-        - libva-intel-media-driver
-        - intel-media-driver
-        - mesa-dri-drivers
-        - mesa-vulkan-drivers
-
-  - type: files
-    files:
-      - source: scripts
-        destination: /usr/local/bin
-      - source: systemd
-        destination: /etc/systemd/system
-
-  - type: systemd
-    system:
-      enabled:
-        - live-detect.service
-
-  - type: default-flatpaks
-    configurations:
-      - notify: false
-        scope: system
-        install:
-          - org.mozilla.firefox
-          - org.kde.kate
+  - from-file: common/base.yml
 
   - type: signing
