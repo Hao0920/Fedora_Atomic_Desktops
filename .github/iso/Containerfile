@@ -22,7 +22,7 @@ RUN dnf5 install -qy \
     google-noto-sans-cjk-fonts \
     xorrisofs \
     squashfs-tools \
-    implantisomd5 \
+    isomd5sum \
     podman \
     python-unversioned-command \
     jq \
