@@ -47,7 +47,6 @@ modules:
         - goldendict-ng
         - tio
         - flameshot
-        - steam
         - gamemode
 
         # OCR languages configured for Spectacle in NixOS.
