@@ -23,7 +23,7 @@ modules:
         - material-icons-fonts
         - jetbrains-mono-fonts
         - fira-code-fonts
-        - hack-fonts
+        - source-foundry-hack-fonts
         - google-roboto-fonts
         - open-sans-fonts
 
