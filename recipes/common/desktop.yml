@@ -19,7 +19,7 @@ modules:
         - google-noto-sans-cjk-fonts
         - google-noto-serif-cjk-fonts
         - wqy-zenhei-fonts
-        - fontawesome-fonts
+        - fontawesome-fonts-all
         - material-icons-fonts
         - jetbrains-mono-fonts
         - fira-code-fonts
