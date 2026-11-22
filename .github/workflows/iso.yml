@@ -60,22 +60,24 @@ jobs:
 
       - name: Generate installer ISO
         run: |
-          mkdir -p output
+          mkdir -p output/iso
 
           sudo podman run --privileged --rm \
-            -v "$PWD/output:/output" \
+            -v "$PWD/output/iso:/output" \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             ghcr.io/osbuild/image-builder-cli:latest \
             build \
             --bootc-ref localhost/fedora-atomic-installer:latest \
             --bootc-default-fs ext4 \
+            --output-dir /output \
+            --output-name fedora-atomic-desktops-${{ inputs.image_tag }} \
             generic-iso
 
       - name: Upload ISO
         uses: actions/upload-artifact@v4
         with:
           name: fedora-atomic-desktops-${{ inputs.image_tag }}-installer-iso
-          path: output/**/*.iso
+          path: output/iso/**/*.iso
           if-no-files-found: error
           compression-level: 0
           retention-days: 7
