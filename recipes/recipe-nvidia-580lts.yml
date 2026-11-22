@@ -24,5 +24,6 @@ modules:
   # GTX 1050 Ti (Pascal) requires the proprietary NVIDIA kernel module.
   - type: akmods
     nvidia-driver: nvidia
+    install: []
 
   - type: signing
