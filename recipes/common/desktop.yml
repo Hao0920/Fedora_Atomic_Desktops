@@ -11,7 +11,6 @@ modules:
         - fcitx5-autostart
         - fcitx5-rime
         - fcitx5-configtool
-        - kcm-fcitx5
         - fcitx5-qt
         - fcitx5-gtk
         - glibc-langpack-zh
