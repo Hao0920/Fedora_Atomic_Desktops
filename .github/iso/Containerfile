@@ -3,45 +3,49 @@ FROM quay.io/fedora/fedora-bootc:45
 
 ARG CONTAINER_NAME=ghcr.io/hao0920/fedora-atomic-desktops:latest
 
-# Anaconda 图形安装器及 ISO 所需组件
 RUN dnf5 install -qy \
     anaconda \
     anaconda-install-img-deps \
     anaconda-dracut \
     dracut-config-generic \
     dracut-network \
+    dracut-live \
     net-tools \
     grub2-efi-x64-cdboot \
+    grub2-common \
+    grub2-pc-modules \
+    grub2-tools \
     plymouth \
     default-fonts-core-sans \
     default-fonts-other-sans \
     google-noto-sans-cjk-fonts \
-    xorrisofs \
+    xorriso \
     squashfs-tools \
+    isomd5sum \
+    podman \
+    python-unversioned-command \
     jq \
     && dnf5 clean all
 
-# UEFI 启动文件
-RUN mkdir -p /boot/efi && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
+RUN mkdir -p /boot/efi && \
+    cp -ra /usr/lib/efi/*/*/EFI /boot/efi
 
-# ISO 启动菜单
 RUN mkdir -p /usr/lib/image-builder/bootc
 
 RUN cat <<'EOF' > /usr/lib/image-builder/bootc/iso.yaml
 label: "Fedora-Atomic-Desktops"
 grub2:
+  timeout: 5
   entries:
     - name: "Install Fedora Atomic Desktops"
-      linux: "/images/pxeboot/vmlinuz inst.stage2=hd:LABEL=Fedora-Atomic-Desktops console=tty0 inst.graphical rhgb quiet"
-      initrd: "/images/pxeboot/initrd.img"
+      linux: "${kernelpath} ${root} inst.graphical"
+      initrd: "${initrdpath}"
 EOF
 
-# 指定要安装的系统镜像
 RUN mkdir -p /usr/share/anaconda && \
     echo "bootc --source-imgref registry:${CONTAINER_NAME} --target-imgref ${CONTAINER_NAME}" \
     > /usr/share/anaconda/interactive-defaults.ks
 
-# Anaconda 环境配置
 RUN echo "install:x:0:0:root:/root:/usr/libexec/anaconda/run-anaconda" >> /etc/passwd && \
     echo "install::14438:0:99999:7:::" >> /etc/shadow && \
     passwd -d root
@@ -61,14 +65,16 @@ RUN cat <<'EOF' > /usr/lib/systemd/logind.conf.d/anaconda-shell.conf
 ReserveVT=2
 EOF
 
-# 生成包含 Anaconda 的 initramfs
-RUN mkdir -p "$(realpath /root)" && \
-    kernel=$(kernel-install list --json pretty | jq -r '.[] | select(.has_kernel == true) | .version') && \
+RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
+    cat <<'EOF' > /usr/lib/dracut/dracut.conf.d/40-iso.conf
+add_dracutmodules+=" dmsquash-live "
+EOF
+
+RUN kernel=$(kernel-install list --json pretty | jq -r '.[] | select(.has_kernel == true) | .version') && \
     DRACUT_NO_XATTR=1 dracut --force -v --zstd --reproducible --no-hostonly \
-    --add "anaconda" \
+    --add "anaconda dmsquash-live" \
     "/usr/lib/modules/${kernel}/initramfs.img" "${kernel}"
 
-# 允许 Anaconda 在 root 安装环境使用 PipeWire
 RUN mkdir -p /etc/systemd/user/pipewire.service.d \
     /etc/systemd/user/pipewire.socket.d
 
