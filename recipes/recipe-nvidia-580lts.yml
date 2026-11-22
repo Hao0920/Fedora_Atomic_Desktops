@@ -1,6 +1,6 @@
 ---
 name: fedora-atomic-desktops
-description: Fedora Atomic KDE with NVIDIA 580 LTS driver
+description: Fedora Atomic KDE with NVIDIA 580 legacy driver for Maxwell/Pascal/Volta
 alt-tags:
   - nvidia-580lts
 
@@ -11,14 +11,17 @@ modules:
   - type: os-release
     properties:
       NAME: Fedora Atomic Desktops
-      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA 580 LTS)
+      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA 580 Legacy)
       VARIANT: KDE Edition
       VARIANT_ID: kde
       ID: fedora
       ID_LIKE: fedora
 
   - from-file: common/base.yml
+  - from-file: common/desktop.yml
 
+  # Negativo17 maintains a dedicated 580 LTS repository for Maxwell/Pascal/Volta.
+  # Keep the proprietary kernel module; these GPUs are not supported by nvidia-open.
   - type: dnf
     repos:
       cleanup: true

@@ -1,0 +1,58 @@
+# Desktop packages mapped from modules/desktop and home/apps in NixOS.
+modules:
+  - type: dnf
+    repos:
+      cleanup: true
+      nonfree: rpmfusion
+    install:
+      packages:
+        # Fcitx5 + Rime (NixOS modules/desktop/input-method.nix)
+        - fcitx5
+        - fcitx5-autostart
+        - fcitx5-rime
+        - fcitx5-configtool
+        - fcitx5-qt
+        - fcitx5-gtk
+        - glibc-langpack-zh
+
+        # Fonts (NixOS modules/system/fonts.nix)
+        - google-noto-sans-cjk-fonts
+        - google-noto-serif-cjk-fonts
+        - wqy-zenhei-fonts
+        - fontawesome-fonts
+        - material-icons-fonts
+        - jetbrains-mono-fonts
+        - fira-code-fonts
+        - hack-fonts
+        - roboto-fonts
+        - open-sans-fonts
+
+        # KDE applications (NixOS modules/desktop/kde-apps.nix)
+        - kcalc
+        - marknote
+        - kclock
+        - kweather
+        - haruna
+        - krecorder
+        - kamoso
+        - isoimagewriter
+        - spectacle
+        - akregator
+        - kde-connect
+
+        # User applications with Fedora packages
+        - thunderbird
+        - keepassxc
+        - libreoffice
+        - goldendict-ng
+        - tio
+        - flameshot
+        - steam
+        - gamemode
+
+        # OCR languages configured for Spectacle in NixOS.
+        - tesseract-langpack-chi_sim
+        - tesseract-langpack-chi_tra
+        - tesseract-langpack-eng
+        - tesseract-langpack-jpn
+        - tesseract-langpack-kor

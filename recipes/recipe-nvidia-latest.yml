@@ -1,6 +1,6 @@
 ---
 name: fedora-atomic-desktops
-description: Fedora Atomic KDE with NVIDIA latest driver
+description: Fedora Atomic KDE with current NVIDIA driver for supported GPUs
 alt-tags:
   - nvidia-latest
 
@@ -11,13 +11,14 @@ modules:
   - type: os-release
     properties:
       NAME: Fedora Atomic Desktops
-      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA)
+      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA Current)
       VARIANT: KDE Edition
       VARIANT_ID: kde
       ID: fedora
       ID_LIKE: fedora
 
   - from-file: common/base.yml
+  - from-file: common/desktop.yml
 
   - type: dnf
     repos:

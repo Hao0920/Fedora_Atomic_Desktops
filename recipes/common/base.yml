@@ -1,16 +1,30 @@
-# 公共基础配置
+# Shared system foundation mapped from the NixOS configuration.
 modules:
   - type: dnf
     repos:
       cleanup: true
+      nonfree: rpmfusion
     install:
       packages:
+        # NixOS modules/system/tools.nix
+        - git
+        - gparted
         - pciutils
-        - gum
-        - micro
-        - fastfetch
+        - usbutils
+        - btop
+        - tree
+        - unar
+        - 7zip
+
+        # NixOS modules/system/network.nix / hardware.nix / printing.nix
+        - avahi
+        - bluez
+        - cups
+        - system-config-printer
+
     remove:
       packages:
+        # Firefox is managed as a system Flatpak below.
         - firefox
         - firefox-langpacks
 
@@ -20,6 +34,7 @@ modules:
       nonfree: rpmfusion
     install:
       packages:
+        # Intel graphics/media support; useful on the Intel + NVIDIA desktop.
         - libva-intel-driver
         - libva-intel-media-driver
         - intel-media-driver
@@ -28,20 +43,31 @@ modules:
 
   - type: files
     files:
-      - source: scripts
-        destination: /usr/local/bin
-      - source: systemd
-        destination: /etc/systemd/system
+      # files/system/etc/... is copied to /etc/...
+      - source: system
+        destination: /
 
   - type: systemd
     system:
       enabled:
-        - live-detect.service
+        - avahi-daemon.service
+        - bluetooth.service
+        - cups.service
+        - fstrim.timer
 
   - type: default-flatpaks
     configurations:
       - notify: false
         scope: system
         install:
+          # Firefox and KDE applications used in the NixOS configuration.
           - org.mozilla.firefox
           - org.kde.kate
+
+          # NixOS modules/apps/flatpak.nix
+          - com.qq.QQ
+          - com.tencent.WeChat
+          - com.tencent.wemeet
+          - sh.cider.Cider
+
+      - scope: user

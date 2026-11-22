@@ -1,8 +1,7 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: fedora-atomic-desktops
-description: Fedora Atomic KDE with automatic GPU detection
-
+description: Fedora Atomic KDE with shared desktop configuration
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: latest
 
@@ -17,5 +16,6 @@ modules:
       ID_LIKE: fedora
 
   - from-file: common/base.yml
+  - from-file: common/desktop.yml
 
   - type: signing
