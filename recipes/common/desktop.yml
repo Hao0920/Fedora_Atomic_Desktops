@@ -24,7 +24,7 @@ modules:
         - jetbrains-mono-fonts
         - fira-code-fonts
         - hack-fonts
-        - roboto-fonts
+        - google-roboto-fonts
         - open-sans-fonts
 
         # KDE applications (NixOS modules/desktop/kde-apps.nix)
