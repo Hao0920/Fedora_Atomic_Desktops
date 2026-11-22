@@ -1,0 +1,81 @@
+
+name: Build Installer ISO
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: System image to install
+        required: true
+        type: choice
+        default: latest
+        options:
+          - latest
+          - amd
+          - nvidia-latest
+          - nvidia-580lts
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: installer-iso-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-iso:
+    name: Build Anaconda Installer ISO
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GH_TOKEN" | sudo podman login ghcr.io \
+            --username "${{ github.actor }}" \
+            --password-stdin
+
+      - name: Pull system image
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          sudo podman pull \
+            "ghcr.io/hao0920/fedora-atomic-desktops:${IMAGE_TAG}"
+
+      - name: Build installer container
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          sudo podman build \
+            --build-arg CONTAINER_NAME="ghcr.io/hao0920/fedora-atomic-desktops:${IMAGE_TAG}" \
+            --tag localhost/fedora-atomic-installer:latest \
+            --file .github/iso/Containerfile \
+            .
+
+      - name: Generate installer ISO
+        run: |
+          mkdir -p output
+
+          sudo podman run --privileged --rm \
+            -v "$PWD/output:/output" \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
+            ghcr.io/osbuild/image-builder-cli:latest \
+            build \
+            --bootc-ref localhost/fedora-atomic-installer:latest \
+            --bootc-default-fs ext4 \
+            generic-iso
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: fedora-atomic-desktops-${{ inputs.image_tag }}-installer-iso
+          path: output/**/*.iso
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
