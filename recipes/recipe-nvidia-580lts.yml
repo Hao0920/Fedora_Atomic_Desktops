@@ -1,6 +1,7 @@
+
 ---
 name: fedora-atomic-desktops
-description: Fedora Atomic KDE with NVIDIA 580 legacy driver for Maxwell/Pascal/Volta
+description: Fedora Atomic KDE with NVIDIA 580 LTS proprietary kernel driver for Maxwell, Pascal and Volta GPUs
 alt-tags:
   - nvidia-580lts
 
@@ -11,7 +12,7 @@ modules:
   - type: os-release
     properties:
       NAME: Fedora Atomic Desktops
-      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA 580 Legacy)
+      PRETTY_NAME: Fedora Atomic Desktops (NVIDIA 580 LTS)
       VARIANT: KDE Edition
       VARIANT_ID: kde
       ID: fedora
@@ -20,21 +21,8 @@ modules:
   - from-file: common/base.yml
   - from-file: common/desktop.yml
 
-  # Negativo17 maintains a dedicated 580 LTS repository for Maxwell/Pascal/Volta.
-  # Keep the proprietary kernel module; these GPUs are not supported by nvidia-open.
-  - type: dnf
-    repos:
-      cleanup: true
-      files:
-        - https://negativo17.org/repos/fedora-nvidia-580.repo
-      keys:
-        - https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-    install:
-      packages:
-        - nvidia-driver
-        - nvidia-settings
-        - nvidia-driver-cuda
-        - nvidia-driver-libs.i686
-        - libva-nvidia-driver
+  # GTX 1050 Ti (Pascal) requires the proprietary NVIDIA kernel module.
+  - type: akmods
+    nvidia-driver: nvidia
 
   - type: signing
