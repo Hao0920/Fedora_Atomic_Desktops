@@ -69,5 +69,6 @@ modules:
           - com.tencent.WeChat
           - com.tencent.wemeet
           - sh.cider.Cider
+          - com.valvesoftware.Steam
 
       - scope: user
