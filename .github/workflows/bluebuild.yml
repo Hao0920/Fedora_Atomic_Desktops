@@ -25,10 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         recipe:
-          - recipes/recipe.yml
-          - recipes/recipe-amd.yml
-          - recipes/recipe-nvidia-latest.yml
-          - recipes/recipe-nvidia-580lts.yml
+          - recipe.yml
+          - recipe-amd.yml
+          - recipe-nvidia-latest.yml
+          - recipe-nvidia-580lts.yml
 
     steps:
       - name: Build Custom Image
